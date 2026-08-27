@@ -1,8 +1,9 @@
 # Repo-root Location entity.
 #
 # Register this one file's raw URL in Backstage ("Register existing component")
-# and all four entities below are ingested together, rather than registering
-# each descriptor separately.
+# and every entity below is ingested together, rather than registering each
+# descriptor separately. The local portal in Portal/backstage reads this same
+# file as a `type: file` location — see its app-config.yaml.
 #
 # When you add a component, add its descriptor to spec.targets.
 apiVersion: backstage.io/v1alpha1
@@ -11,8 +12,13 @@ metadata:
   name: devportal-catalog
   description: All catalog entities declared in the DevPortal repository.
 spec:
-  type: url
+  # spec.type is deliberately omitted: when left out it is inherited from the
+  # location that read this entity, and the relative targets below resolve
+  # against this file's own location. Pinning `type: url` here would break the
+  # local `file:` ingestion, because the relative paths would be read as URLs.
+  # Do not add it back.
   targets:
     - ./Platforms/example-platform/catalog-info.yaml
     - ./Services/example-service/catalog-info.yaml
     - ./Libraries/example-lib/catalog-info.yaml
+    - ./Portal/backstage/catalog-info.yaml

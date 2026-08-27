@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: devportal
+  title: DevPortal Portal
+  description: The Backstage instance that serves this repository's catalog.
+  # Example for optional annotations
+  # annotations:
+  #   github.com/project-slug: backstage/backstage
+  #   backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  owner: group:default/platform-team
+  lifecycle: experimental

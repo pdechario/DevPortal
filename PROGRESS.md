@@ -29,6 +29,84 @@ When you finish a substantive piece of work, add an entry to this file.
 
 ---
 
+## 2026-08-27 — Local Backstage portal, and first validation against a real instance
+
+### Overview
+Installed Backstage 1.54.0 in `Portal/backstage` via `create-app`, pointed it at
+this repo's root `catalog-info.yaml`, and used it to validate the descriptors for
+the first time. All four entities ingest, the full relation graph resolves, and
+TechDocs renders for all three documented entities. Added `TODO.md` as the live
+backlog, separate from this file's history.
+
+### Key decisions
+- **Backstage is now installed in `Portal/backstage`, superseding the 2026-08-26
+  decision "Backstage itself is not installed in `Portal/`"** — that entry's own
+  top open risk was that nothing had ever checked the descriptors against
+  Backstage's real schema, and running an instance was the only way to close it.
+  The `create-app` monorepo cost (~1.7 GB of `node_modules`) was accepted for that
+  reason.
+- **App nested in `Portal/backstage/` rather than `Portal/` itself** — `--path`
+  templates directly into the target directory with no emptiness check, so using
+  `Portal/` would have overwritten `Portal/README.md`; the extra level keeps a
+  human-written explainer above the generated monorepo.
+- **Node pinned to 24 via a repo-root `.nvmrc`, installed with `fnm`** — Backstage
+  supports exactly two adjacent even majors (`engines.node: "22 || 24"`) and
+  `create-app` hard-fails on odd ones, so the system Homebrew node@25 cannot build
+  it. `.nvmrc` sits at the repo root because the generated app's `.gitignore`
+  ignores `.nvmrc`, so one placed inside it would never be committed.
+- **`spec.type: url` removed from the root `catalog-info.yaml`** — omitted, the
+  type is inherited from whatever location read the entity, so one descriptor now
+  serves both local `file:` ingestion and remote URL registration. Keeping
+  `type: url` would have made the relative `spec.targets` be read as URLs and
+  broken local ingestion.
+- **`Domain` added to `catalog.rules.allow`** — `create-app`'s default list omits
+  it, and a disallowed kind is rejected outright rather than merely failing to
+  resolve, so `example-domain` would have silently never appeared.
+- **The portal registers itself** — `Portal/backstage/catalog-info.yaml` had its
+  placeholder `owner: john@example.com` replaced and was added to the root
+  `spec.targets`, so the thing serving the catalog appears in it.
+- **`create-app`'s `examples/` fixtures were kept for now** — they supply the
+  `guest` user that the guest auth provider needs and a working scaffolder demo;
+  removing them is tracked in `TODO.md` rather than done blind.
+- **`tsBuildInfoFile` pinned inside `dist/` for `example-service`** — see below;
+  the two settings that conflicted are now unable to desync.
+- **`TODO.md` introduced as a separate, mutable backlog** — this file is
+  append-only history, so it cannot answer "what is left right now" without a
+  reader diffing every entry.
+
+### Unfinished / future work
+- **`example-service`'s build was silently emitting nothing — fixed.** `nest-cli.json`
+  sets `deleteOutDir: true` while `tsconfig.json` sets `incremental: true`, so
+  `nest build` wiped `dist/`, then tsc consulted the surviving
+  `tsconfig.tsbuildinfo`, concluded the output was current, and emitted nothing
+  while **exiting 0**. Any build after the first therefore produced an empty
+  `dist/` with no error. Fixed by setting `tsBuildInfoFile: "dist/.tsbuildinfo"`
+  so the buildinfo is deleted along with the output; verified by building twice in
+  a row. `example-lib` sets neither option and was unaffected.
+- **Everything the 2026-08-26 entry listed as unverified is now verified.**
+  Against the live instance: all four entities ingest with no processing errors;
+  `Domain → System → Component` and the `example-service → example-lib`
+  `dependsOn` edge all resolve, including the auto-derived reverse
+  `dependencyOf`; TechDocs builds and serves HTTP 200 for `example-service`,
+  `example-lib`, and `example-platform`. Both example packages build and the
+  service answers `/health` under Node 24.
+- **`group:default/platform-team` is still undeclared** — confirmed unresolved
+  against the live instance. Ingestion is unaffected; the owner renders as a dead
+  link. Tracked in `TODO.md`.
+- **The first `yarn start` on a cold cache crashes the backend.** The `app` plugin
+  fails with `IPC request 'DevDataStore.load' with ID 0 timed out` because
+  webpack's first compile outruns the backend's wait, and the whole backend then
+  shuts down — every `/api/*` returns 404 while the frontend still serves. A
+  second `yarn start` succeeds with a warm cache. Not worked around; if it becomes
+  a recurring annoyance the two halves can be started separately.
+- **Catalog state does not survive restarts** — `better-sqlite3` with
+  `connection: ':memory:'`. Re-ingested from disk on every boot.
+- **11 of the 16 ingested entities are `create-app` demo data.** Tracked in
+  `TODO.md`.
+- **`create-app` emitted no `.github/` directory** despite its 0.9.1 changelog
+  advertising a generated CI workflow. There is still no CI anywhere in the repo.
+- **Guest is the only auth provider**, so ownership filtering is meaningless.
+
 ## 2026-08-26 — Initial Backstage catalog scaffold
 
 ### Overview

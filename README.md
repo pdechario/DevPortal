@@ -4,7 +4,9 @@ Source of truth for the entities published to our Backstage IDP. Each top-level
 directory holds one class of entity, and each entity folder is self-describing:
 it carries its own catalog descriptor and its own documentation.
 
-Currently one minimal example of each kind, meant to be copied.
+Currently one minimal example of each kind, meant to be copied. A local
+Backstage instance lives in `Portal/backstage` and ingests them all — see
+`Portal/README.md` to run it.
 
 ## Layout
 
@@ -13,9 +15,10 @@ Currently one minimal example of each kind, meant to be copied.
 | `Platforms/` | `Domain` and `System` entities — groupings, not code |
 | `Services/` | `Component` entities of type `service` — deployable apps |
 | `Libraries/` | `Component` entities of type `library` — shared code |
-| `Portal/` | Placeholder. The Backstage app is not installed here. |
+| `Portal/` | The Backstage app itself, in `Portal/backstage/` |
 | `catalog-info.yaml` | Root `Location` entity listing every descriptor |
 | `PROGRESS.md` | Running log of what changed and why, newest entry first |
+| `TODO.md` | The live backlog — what is left, as opposed to what happened |
 
 ## Entity graph
 
@@ -26,6 +29,8 @@ Domain: example-domain
     └── Component: example-lib       (type: library)
 
 example-service ──dependsOn──> example-lib
+
+Component: devportal                 (type: website — the portal itself)
 ```
 
 Components join a platform by setting `spec.system` in their own descriptor;
@@ -57,9 +62,26 @@ is nothing to compile.
 
 ## Registering in Backstage
 
-Register the raw URL of the **root** `catalog-info.yaml` via *Create → Register
-existing component*. It is a `Location` entity, so all four entities are
-ingested in one pass. Add new descriptors to its `spec.targets`.
+The root `catalog-info.yaml` is a `kind: Location` listing every descriptor, so
+one registration ingests the whole repo. Two ways in:
+
+- **Locally** — already wired. `Portal/backstage/app-config.yaml` reads the root
+  descriptor as a `type: file` location, so `yarn start` picks up the working
+  tree with no registration step at all.
+- **A remote Backstage** — register the raw URL of the root
+  `catalog-info.yaml` via *Create → Register existing component*.
+
+The same file serves both because **`spec.type` is deliberately omitted**. Left
+out, the type is inherited from whatever location read the entity, and the
+relative `spec.targets` resolve against the file's own location. Pinning
+`type: url` would break local ingestion, since the relative paths would be read
+as URLs. Do not add it back.
+
+One non-obvious constraint: a Backstage location only emits entity kinds it is
+explicitly allowed to. `create-app`'s default `catalog.rules.allow` omits
+`Domain`, and a disallowed kind is **rejected outright** rather than merely
+failing to resolve — so `example-domain` silently never appears until `Domain`
+is added to that list.
 
 ## Adding a component
 
@@ -76,18 +98,23 @@ exact string match, so renaming later means updating every `spec.system`,
 
 ## Local development
 
-The example packages install independently — there is no workspace yet.
+The example packages install independently — there is no workspace yet. The
+repo pins Node 24 via `.nvmrc` (Backstage requires 22 or 24; run `fnm use`).
+
+`example-service` and the Backstage frontend both default to port 3000, so run
+one at a time or set `PORT`.
 
 ```bash
-cd Services/example-service && npm install && npm run start
-curl localhost:3000/health        # {"status":"ok","service":"example-service"}
+cd Services/example-service && npm install && npm run build
+PORT=3001 node dist/main.js
+curl localhost:3001/health        # {"status":"ok","service":"example-service"}
 
 cd Libraries/example-lib && npm install && npm run build
 ```
 
-To preview docs the way the portal renders them:
+To preview docs the way the portal renders them, use the portal — start it and
+open an entity's Docs tab. TechDocs generates via Docker, so **Docker must be
+running**, but no local Python or MkDocs install is needed.
 
-```bash
-pip install mkdocs-techdocs-core
-mkdocs serve                      # from inside an entity folder
-```
+For a faster loop on prose alone, `pip install mkdocs-techdocs-core` and run
+`mkdocs serve` from inside an entity folder.

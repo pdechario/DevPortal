@@ -10,6 +10,10 @@
     "declaration": true,
     "sourceMap": true,
     "incremental": true,
+    // Must live inside outDir. nest-cli.json sets deleteOutDir, which wipes
+    // dist/ before compiling; if the buildinfo survives outside it, tsc
+    // believes the output is current and emits nothing while exiting 0.
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
