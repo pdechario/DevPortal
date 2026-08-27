@@ -22,3 +22,12 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# Nested package artifacts (the rules above are root-anchored and
+# will not match Services/*/node_modules or Libraries/*/dist).
+node_modules/
+dist/
+*.tsbuildinfo
+
+# MkDocs build output
+site/

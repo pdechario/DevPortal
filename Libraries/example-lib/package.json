@@ -1,0 +1,19 @@
+{
+  "name": "@example/example-lib",
+  "version": "0.1.0",
+  "description": "Reference shared TypeScript library for the developer portal.",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,5 @@
+site_name: example-lib
+nav:
+  - Home: index.md
+plugins:
+  - techdocs-core

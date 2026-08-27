@@ -1,0 +1,5 @@
+site_name: example-platform
+nav:
+  - Home: index.md
+plugins:
+  - techdocs-core

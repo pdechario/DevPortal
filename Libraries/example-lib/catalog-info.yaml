@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-lib
+  title: Example Library
+  description: >-
+    Reference shared TypeScript library. Copy this folder to declare a new library.
+  annotations:
+    # Required, or the Docs tab in Backstage renders empty.
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - example
+    - typescript
+    - library
+spec:
+  type: library
+  lifecycle: experimental
+  owner: group:default/platform-team
+  system: example-platform

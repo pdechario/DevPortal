@@ -1,0 +1,28 @@
+# Two entities in one descriptor, separated by `---`.
+# The Domain is the business-level grouping; the System is the platform itself.
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: example-domain
+  title: Example Domain
+  description: Business-level grouping that owns the example platform.
+spec:
+  owner: group:default/platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: example-platform
+  title: Example Platform
+  description: >-
+    Reference platform grouping the example service and example library.
+    Copy this folder to declare a new platform.
+  annotations:
+    # Required, or the Docs tab in Backstage renders empty.
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - example
+    - platform
+spec:
+  owner: group:default/platform-team
+  domain: example-domain

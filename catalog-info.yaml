@@ -1,0 +1,18 @@
+# Repo-root Location entity.
+#
+# Register this one file's raw URL in Backstage ("Register existing component")
+# and all four entities below are ingested together, rather than registering
+# each descriptor separately.
+#
+# When you add a component, add its descriptor to spec.targets.
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: devportal-catalog
+  description: All catalog entities declared in the DevPortal repository.
+spec:
+  type: url
+  targets:
+    - ./Platforms/example-platform/catalog-info.yaml
+    - ./Services/example-service/catalog-info.yaml
+    - ./Libraries/example-lib/catalog-info.yaml

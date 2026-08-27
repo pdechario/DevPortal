@@ -1,0 +1,23 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-service
+  title: Example Service
+  description: >-
+    Reference NestJS HTTP service. Copy this folder to declare a new service.
+  annotations:
+    # Required, or the Docs tab in Backstage renders empty.
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - example
+    - typescript
+    - nestjs
+    - service
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/platform-team
+  system: example-platform
+  # Catalog-level relationship only; there is no npm dependency yet.
+  dependsOn:
+    - component:default/example-lib
