@@ -31,3 +31,5 @@ dist/
 
 # MkDocs build output
 site/
+
+*local*
