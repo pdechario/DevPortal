@@ -190,7 +190,7 @@ catalog:
   rules:
     # Domain is NOT in the create-app default; without it the example-domain
     # entity is rejected outright rather than merely failing to resolve.
-    - allow: [Component, System, Domain, API, Resource, Location, Template]
+    - allow: [Component, System, Domain, API, Resource, Location, Template, User, Group]
   locations:
     # This repository's own entities. The root descriptor is a kind: Location,
     # so this single target ingests every entity listed in its spec.targets.

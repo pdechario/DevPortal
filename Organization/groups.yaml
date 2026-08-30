@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: The core platform engineering team
+  namespace: default
+spec:
+  type: team
+  profile:
+    displayName: Platform Team
+    email: platform@example.com
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: product-team
+  title: Product Team
+  description: Product and feature development team
+  namespace: default
+spec:
+  type: team
+  profile:
+    displayName: Product Team
+    email: product@example.com

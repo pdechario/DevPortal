@@ -1,0 +1,55 @@
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jane
+  title: Jane
+  namespace: default
+spec:
+  profile:
+    displayName: Jane Doe
+    email: jane@example.com
+  memberOf:
+    - platform-team
+    - product-team
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: john
+  title: John
+  namespace: default
+spec:
+  profile:
+    displayName: John Smith
+    email: john@example.com
+  memberOf:
+    - platform-team
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: alice
+  title: Alice
+  namespace: default
+spec:
+  profile:
+    displayName: Alice Chen
+    email: alice@example.com
+  memberOf:
+    - product-team
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: bob
+  title: Bob
+  namespace: default
+spec:
+  profile:
+    displayName: Bob Martinez
+    email: bob@example.com
+  memberOf:
+    - product-team

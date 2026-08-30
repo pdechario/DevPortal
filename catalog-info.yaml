@@ -18,6 +18,8 @@ spec:
   # local `file:` ingestion, because the relative paths would be read as URLs.
   # Do not add it back.
   targets:
+    - ./Organization/groups.yaml
+    - ./Organization/users.yaml
     - ./Platforms/example-platform/catalog-info.yaml
     - ./Services/example-service/catalog-info.yaml
     - ./Libraries/example-lib/catalog-info.yaml
