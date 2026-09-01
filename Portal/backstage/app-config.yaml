@@ -215,6 +215,17 @@ catalog:
       rules:
         - allow: [User, Group]
 
+    # Organizational users and groups
+    - type: file
+      target: ../../../../Organization/users.yaml
+      rules:
+        - allow: [User]
+
+    - type: file
+      target: ../../../../Organization/groups.yaml
+      rules:
+        - allow: [Group]
+
     ## Uncomment these lines to add more example data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml

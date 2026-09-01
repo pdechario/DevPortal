@@ -10,6 +10,7 @@ spec:
   profile:
     displayName: Platform Team
     email: platform@example.com
+  children: []
 
 ---
 apiVersion: backstage.io/v1alpha1
@@ -24,3 +25,4 @@ spec:
   profile:
     displayName: Product Team
     email: product@example.com
+  children: []
