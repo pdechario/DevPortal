@@ -16,7 +16,7 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: group:default/platform-team
+  owner: group:namespace2/team2
   system: example-platform
   # Catalog-level relationship only; there is no npm dependency yet.
   dependsOn:

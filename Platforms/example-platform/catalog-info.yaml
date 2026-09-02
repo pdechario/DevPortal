@@ -7,7 +7,7 @@ metadata:
   title: Example Domain
   description: Business-level grouping that owns the example platform.
 spec:
-  owner: group:default/platform-team
+  owner: group:namespace2/team2
 ---
 apiVersion: backstage.io/v1alpha1
 kind: System
@@ -24,5 +24,5 @@ metadata:
     - example
     - platform
 spec:
-  owner: group:default/platform-team
+  owner: group:namespace2/team2
   domain: example-domain

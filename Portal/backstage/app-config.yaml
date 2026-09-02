@@ -97,7 +97,7 @@ app:
               height: 4
 
 organization:
-  name: DevPortal
+  name: Organization1
 
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
